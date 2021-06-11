@@ -1,11 +1,14 @@
 package learn.foraging.data;
 
 import learn.foraging.models.Forager;
+import learn.foraging.models.Item;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOError;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -61,4 +64,6 @@ public class ForagerFileRepository implements ForagerRepository {
         result.setState(fields[3]);
         return result;
     }
+
+
 }

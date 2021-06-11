@@ -19,6 +19,11 @@ public class ForageFileRepository implements ForageRepository {
         this.directory = directory;
     }
 
+    public static void main(String[] args) {
+        LocalDate date = LocalDate.of(2020,06, 19);
+       // findKilogramsOfItemsOnDate(date);
+    }
+
     @Override
     public List<Forage> findByDate(LocalDate date) {
         ArrayList<Forage> result = new ArrayList<>();
@@ -100,5 +105,15 @@ public class ForageFileRepository implements ForageRepository {
         item.setId(Integer.parseInt(fields[2]));
         result.setItem(item);
         return result;
+    }
+
+    public void findKilogramsOfItemsOnDate(LocalDate date) {
+        // not sure what this is going to return yet
+        List<Forage> forages = this.findByDate(date);
+
+        forages.stream().forEach(forage -> {
+            System.out.println("Item: " + forage.getItem().getName() + " | Kilograms: " + forage.getKilograms());
+        });
+
     }
 }
