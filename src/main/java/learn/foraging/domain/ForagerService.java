@@ -68,7 +68,7 @@ public class ForagerService {
         }
 
         if (forager.getState() == null || forager.getState().equals("")) {
-            result.addErrorMessage("Forager state cannot be null.");
+            result.addErrorMessage("Forager state is required.");
         }
 
         return result;

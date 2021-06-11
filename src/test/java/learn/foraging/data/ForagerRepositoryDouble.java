@@ -38,7 +38,9 @@ public class ForagerRepositoryDouble implements ForagerRepository {
 
     @Override
     public Forager addForager(Forager forager) {
-        return null;
+        forager.setId(java.util.UUID.randomUUID().toString());
+        foragers.add(forager);
+        return forager;
     }
 
     private static Forager makeForager() {
