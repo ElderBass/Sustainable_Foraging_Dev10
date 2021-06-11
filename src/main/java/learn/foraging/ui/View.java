@@ -36,7 +36,7 @@ public class View {
 
     public LocalDate getForageDate() {
         displayHeader(MainMenuOption.VIEW_FORAGES_BY_DATE.getMessage());
-        return io.readLocalDate("Select a date [yyyy-MM-dd]: ");
+        return io.readLocalDate("Select a date [MM/dd/yyyy]: ");
     }
 
     public String getForagerNamePrefix() {
@@ -171,10 +171,6 @@ public class View {
         if (forages == null || forages.isEmpty()) {
             io.println("No forages found.");
             return;
-        }
-        System.out.println("Inside displayForages:");
-        for (Forage forage : forages) {
-            System.out.println("Forage Date: " + forage.getForager());
         }
         for (Forage forage : forages) {
             io.printf("%s %s - %s: %s - Value: $%.2f%n",

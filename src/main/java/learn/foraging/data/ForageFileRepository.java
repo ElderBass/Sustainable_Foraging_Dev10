@@ -26,7 +26,7 @@ public class ForageFileRepository implements ForageRepository {
 
     @Override
     public List<Forage> findByDate(LocalDate date) {
-        System.out.println("Date inside findByDate ForageFileRepo = " + date);
+
         ArrayList<Forage> result = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(getFilePath(date)))) {
 
@@ -41,10 +41,6 @@ public class ForageFileRepository implements ForageRepository {
             }
         } catch (IOException ex) {
             // don't throw on read
-        }
-        System.out.println("ForageFileRepo findByDate:");
-        for (Forage forage : result) {
-            System.out.println("Forager: " + forage.getForager().getId() + " in state " +  forage.getForager().getState());
         }
         return result;
     }
