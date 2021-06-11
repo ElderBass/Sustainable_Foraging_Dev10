@@ -75,7 +75,7 @@ class ForagerServiceTest {
         forager.setState("Georgia");
 
         Result<Forager> result = service.addForager(forager);
-        assertEquals("Forager state is required.", result.getErrorMessages().get(0));
+        assertEquals("State must be abbreviated.", result.getErrorMessages().get(0));
     }
 
     @Test
