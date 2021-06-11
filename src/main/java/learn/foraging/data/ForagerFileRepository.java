@@ -1,12 +1,10 @@
 package learn.foraging.data;
 
+import learn.foraging.models.Forage;
 import learn.foraging.models.Forager;
 import learn.foraging.models.Item;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOError;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,6 +14,7 @@ import java.util.stream.Collectors;
 public class ForagerFileRepository implements ForagerRepository {
 
     private final String filePath;
+    private final String HEADER = "id,first_name,last_name,state";
 
     public ForagerFileRepository(String filePath) {
         this.filePath = filePath;
@@ -57,8 +56,12 @@ public class ForagerFileRepository implements ForagerRepository {
     }
 
     @Override
-    public Forager addForager(Forager forager) {
-        return null;
+    public Forager addForager(Forager forager) throws DataException {
+        List<Forager> foragers = findAll();
+        forager.setId(java.util.UUID.randomUUID().toString());
+        foragers.add(forager);
+        writeAll(foragers);
+        return forager;
     }
     
     private Forager deserialize(String[] fields) {
@@ -70,5 +73,26 @@ public class ForagerFileRepository implements ForagerRepository {
         return result;
     }
 
+    private String serialize(Forager forager) {
+        return String.format("%s,%s,%s,%s",
+                forager.getId(),
+                forager.getFirstName(),
+                forager.getLastName(),
+                forager.getState());
+    }
 
+    // TODO add a writeAll method to write added Foragers to foragers.csv file
+
+    private void writeAll(List<Forager> foragers) throws DataException {
+        try (PrintWriter writer = new PrintWriter(filePath)) {
+
+            writer.println(HEADER);
+
+            for (Forager forager : foragers) {
+                writer.println(serialize(forager));
+            }
+        } catch (FileNotFoundException ex) {
+            throw new DataException(ex);
+        }
+    }
 }

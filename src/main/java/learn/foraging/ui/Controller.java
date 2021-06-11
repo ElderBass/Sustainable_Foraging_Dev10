@@ -77,10 +77,6 @@ public class Controller {
     private void viewByDate() {
         LocalDate date = view.getForageDate();
         List<Forage> forages = forageService.findByDate(date);
-        System.out.println("Forages inside view by date in Controller:");
-        for (Forage forage : forages) {
-            System.out.println(forage.getDate());
-        }
         view.displayForages(forages);
         view.enterToContinue();
     }
