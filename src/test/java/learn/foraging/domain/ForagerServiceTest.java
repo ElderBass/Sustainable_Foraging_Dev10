@@ -1,7 +1,6 @@
 package learn.foraging.domain;
 
 import learn.foraging.data.DataException;
-import learn.foraging.data.ForagerRepository;
 import learn.foraging.data.ForagerRepositoryDouble;
 import learn.foraging.models.Forager;
 import org.junit.jupiter.api.Test;
@@ -66,6 +65,17 @@ class ForagerServiceTest {
         result = service.addForager(forager);
         assertEquals("Forager state is required.", result.getErrorMessages().get(0));
 
+    }
+
+    @Test
+    void shouldNotAddNonAbbreviatedState() throws DataException {
+        Forager forager = new Forager();
+        forager.setFirstName("Test");
+        forager.setLastName("Testerson");
+        forager.setState("Georgia");
+
+        Result<Forager> result = service.addForager(forager);
+        assertEquals("Forager state is required.", result.getErrorMessages().get(0));
     }
 
     @Test

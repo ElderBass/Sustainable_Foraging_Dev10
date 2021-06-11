@@ -71,6 +71,10 @@ public class ForagerService {
             result.addErrorMessage("Forager state is required.");
         }
 
+        if (forager.getState().length() > 2) {
+            result.addErrorMessage("State must be abbreviated.");
+        }
+
         return result;
     }
 
