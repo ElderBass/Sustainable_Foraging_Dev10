@@ -41,4 +41,9 @@ public class ForageRepositoryDouble implements ForageRepository {
     public boolean update(Forage forage) throws DataException {
         return false;
     }
+
+    @Override
+    public void findKilogramsOfItemsOnDate(LocalDate date) {
+
+    }
 }

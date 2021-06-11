@@ -44,6 +44,10 @@ public class ForageService {
         return result;
     }
 
+    public void findKilogramsOfItemsOnDate(LocalDate date) throws DataException {
+       forageRepository.findKilogramsOfItemsOnDate(date);
+    }
+
     public Result<Forage> add(Forage forage) throws DataException {
         Result<Forage> result = validate(forage);
         if (!result.isSuccess()) {

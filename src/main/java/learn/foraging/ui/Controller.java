@@ -58,8 +58,7 @@ public class Controller {
                     addItem();
                     break;
                 case REPORT_KG_PER_ITEM:
-                    view.displayStatus(false, "NOT IMPLEMENTED");
-                    view.enterToContinue();
+                    viewTotalKilogramsPerItem();
                     break;
                 case REPORT_CATEGORY_VALUE:
                     view.displayStatus(false, "NOT IMPLEMENTED");
@@ -77,6 +76,12 @@ public class Controller {
         LocalDate date = view.getForageDate();
         List<Forage> forages = forageService.findByDate(date);
         view.displayForages(forages);
+        view.enterToContinue();
+    }
+
+    private void viewTotalKilogramsPerItem() throws DataException {
+        LocalDate date = view.getForageDate();
+        forageService.findKilogramsOfItemsOnDate(date);
         view.enterToContinue();
     }
 
