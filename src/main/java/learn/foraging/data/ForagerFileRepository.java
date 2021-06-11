@@ -81,8 +81,6 @@ public class ForagerFileRepository implements ForagerRepository {
                 forager.getState());
     }
 
-    // TODO add a writeAll method to write added Foragers to foragers.csv file
-
     private void writeAll(List<Forager> foragers) throws DataException {
         try (PrintWriter writer = new PrintWriter(filePath)) {
 
