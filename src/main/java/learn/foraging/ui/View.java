@@ -36,7 +36,7 @@ public class View {
 
     public LocalDate getForageDate() {
         displayHeader(MainMenuOption.VIEW_FORAGES_BY_DATE.getMessage());
-        return io.readLocalDate("Select a date [MM/dd/yyyy]: ");
+        return io.readLocalDate("Select a date [yyyy-MM-dd]: ");
     }
 
     public String getForagerNamePrefix() {
@@ -172,9 +172,13 @@ public class View {
             io.println("No forages found.");
             return;
         }
+        System.out.println("Inside displayForages:");
         for (Forage forage : forages) {
-            io.printf("%s %s - %s:%s - Value: $%.2f%n",
-                    forage.getForager().getFirstName(),
+            System.out.println("Forage Date: " + forage.getForager());
+        }
+        for (Forage forage : forages) {
+            io.printf("%s %s - %s: %s - Value: $%.2f%n",
+                    forage.getForager().getFirstName(), // this is where stuff keeps breaking
                     forage.getForager().getLastName(),
                     forage.getItem().getName(),
                     forage.getItem().getCategory(),

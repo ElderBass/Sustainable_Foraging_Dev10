@@ -8,6 +8,7 @@ import learn.foraging.models.Forage;
 import learn.foraging.models.Forager;
 import learn.foraging.models.Item;
 
+import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,18 +29,24 @@ public class ForageService {
     }
 
     public List<Forage> findByDate(LocalDate date) {
-
+    // TODO this foragerMap is coming back empty after this stream...I think this is the problem
         Map<String, Forager> foragerMap = foragerRepository.findAll().stream()
                 .collect(Collectors.toMap(i -> i.getId(), i -> i));
         Map<Integer, Item> itemMap = itemRepository.findAll().stream()
                 .collect(Collectors.toMap(i -> i.getId(), i -> i));
 
         List<Forage> result = forageRepository.findByDate(date);
+        // TODO this is working and getting IDs for both forager and item
         for (Forage forage : result) {
+            System.out.println("setForager/setItem loop = " + forage.getForager().getId() + " item " + forage.getItem().getId());
             forage.setForager(foragerMap.get(forage.getForager().getId()));
             forage.setItem(itemMap.get(forage.getItem().getId()));
         }
-
+        // TODO this is not working and giving me an error
+        System.out.println("ForageService findByDate:");
+        for (Forage forage : result) {
+            System.out.println("Forager: " + forage.getForager().getId() + " in state " +  forage.getForager().getState());
+        }
         return result;
     }
 

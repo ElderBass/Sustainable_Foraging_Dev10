@@ -36,6 +36,11 @@ public class ForagerRepositoryDouble implements ForagerRepository {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Forager addForager(Forager forager) {
+        return null;
+    }
+
     private static Forager makeForager() {
         Forager forager = new Forager();
         forager.setId("0e4707f4-407e-4ec9-9665-baca0aabe88c");

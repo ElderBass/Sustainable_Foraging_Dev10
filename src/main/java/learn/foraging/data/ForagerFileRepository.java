@@ -55,6 +55,11 @@ public class ForagerFileRepository implements ForagerRepository {
                 .filter(i -> i.getState().equalsIgnoreCase(stateAbbr))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public Forager addForager(Forager forager) {
+        return null;
+    }
     
     private Forager deserialize(String[] fields) {
         Forager result = new Forager();

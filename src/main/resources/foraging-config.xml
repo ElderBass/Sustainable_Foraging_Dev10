@@ -12,7 +12,7 @@
 
 
     <bean id="foragerFileRepository" class="learn.foraging.data.ForagerFileRepository">
-        <constructor-arg value="forages.csv"></constructor-arg>
+        <constructor-arg value="./data/foragers.csv"></constructor-arg>
     </bean>
     <bean id="foragerService" class="learn.foraging.domain.ForagerService">
         <constructor-arg ref="foragerFileRepository"/>
