@@ -5,6 +5,7 @@ import learn.foraging.models.Forage;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ForageRepositoryDouble implements ForageRepository {
@@ -43,7 +44,7 @@ public class ForageRepositoryDouble implements ForageRepository {
     }
 
     @Override
-    public void findKilogramsOfItemsOnDate(LocalDate date) {
-
+    public Map<String, Double> findKilogramsOfItemsOnDate(List<Forage> forages) {
+        return null;
     }
 }

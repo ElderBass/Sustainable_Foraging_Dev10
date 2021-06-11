@@ -8,6 +8,7 @@ import learn.foraging.models.Item;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class View {
@@ -35,8 +36,16 @@ public class View {
     }
 
     public LocalDate getForageDate() {
-        displayHeader(MainMenuOption.VIEW_FORAGES_BY_DATE.getMessage());
+        //displayHeader(MainMenuOption.VIEW_FORAGES_BY_DATE.getMessage());
         return io.readLocalDate("Select a date [MM/dd/yyyy]: ");
+    }
+
+    public void displayKilosPerItem(Map<String, Double> items) {
+        displayHeader(MainMenuOption.REPORT_KG_PER_ITEM.getMessage());
+        for (String name : items.keySet()) {
+            System.out.printf("Item: %s | Total Kilograms: %.2f", name, items.get(name));
+            System.out.println();
+        }
     }
 
     public String getForagerNamePrefix() {

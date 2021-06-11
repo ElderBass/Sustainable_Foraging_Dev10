@@ -43,9 +43,12 @@ public class ForageService {
         }
         return result;
     }
-
-    public void findKilogramsOfItemsOnDate(LocalDate date) throws DataException {
-       forageRepository.findKilogramsOfItemsOnDate(date);
+// TODO this may need to be expanded
+    public Map<String, Double> findKilogramsOfItemsOnDate(LocalDate date) throws DataException {
+       List<Forage> foragesOnDate = findByDate(date);
+       Map<String, Double> itemMap = forageRepository.findKilogramsOfItemsOnDate(foragesOnDate);
+       // how/need to verify anything...?
+        return itemMap;
     }
 
     public Result<Forage> add(Forage forage) throws DataException {

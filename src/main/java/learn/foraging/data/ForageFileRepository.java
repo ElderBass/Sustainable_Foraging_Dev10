@@ -16,8 +16,8 @@ public class ForageFileRepository implements ForageRepository {
 
     private static final String HEADER = "id,forager_id,item_id,kg";
     private final String directory;
-    private final ForagerRepository foragerRepository = new ForagerFileRepository("./data/foragers.csv");
-    private final ItemRepository itemRepository = new ItemFileRepository("./data/items.txt");
+   // private final ForagerRepository foragerRepository = new ForagerFileRepository("./data/foragers.csv");
+   // private final ItemRepository itemRepository = new ItemFileRepository("./data/items.txt");
 
     public ForageFileRepository(String directory) {
         this.directory = directory;
@@ -90,30 +90,28 @@ public class ForageFileRepository implements ForageRepository {
                 item.getItem().getId(),
                 item.getKilograms());
     }
-// TODO this isn't actually grabbing the foragers and items...it's just adding the ids of each to the forage and adding new, empty foragers/items
+
+    // TODO I had to change this but might change it back...
     private Forage deserialize(String[] fields, LocalDate date) {
         Forage result = new Forage();
         result.setId(fields[0]);
         result.setDate(date);
         result.setKilograms(Double.parseDouble(fields[3]));
 
-        Forager forager = foragerRepository.findById(fields[1]);
+        Forager forager = new Forager();
+        forager.setId(fields[1]);
         result.setForager(forager);
 
-        Item item = itemRepository.findById(Integer.parseInt(fields[2]));
+        Item item = new Item();
+        item.setId(Integer.parseInt(fields[2]));
         result.setItem(item);
         return result;
     }
 
-    public void findKilogramsOfItemsOnDate(LocalDate date) {
-        // not sure what this is going to return yet
-        List<Forage> forages = findByDate(date);
+    // TODO not sure if here or where but eventually need to ensure there are forages on that date and if not add an error message
+    public Map<String, Double> findKilogramsOfItemsOnDate(List<Forage> forages) {
 
-       Map<String, Double> itemMap = forages.stream().collect(Collectors.groupingBy(Forage::getItemName, Collectors.summingDouble(Forage::getKilograms)));
-        for (String name : itemMap.keySet()) {
-            System.out.printf("Item: %s | Total Kilograms: %.2f", name, itemMap.get(name));
-            System.out.println();
-        }
-
+        Map<String, Double> itemMap = forages.stream().collect(Collectors.groupingBy(Forage::getItemName, Collectors.summingDouble(Forage::getKilograms)));
+        return itemMap;
     }
 }

@@ -12,6 +12,7 @@ import learn.foraging.models.Item;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public class Controller {
 
@@ -73,6 +74,7 @@ public class Controller {
 
     // top level menu
     private void viewByDate() {
+        view.displayHeader(MainMenuOption.VIEW_FORAGES_BY_DATE.getMessage());
         LocalDate date = view.getForageDate();
         List<Forage> forages = forageService.findByDate(date);
         view.displayForages(forages);
@@ -81,7 +83,8 @@ public class Controller {
 
     private void viewTotalKilogramsPerItem() throws DataException {
         LocalDate date = view.getForageDate();
-        forageService.findKilogramsOfItemsOnDate(date);
+        Map<String, Double> itemMap = forageService.findKilogramsOfItemsOnDate(date);
+        view.displayKilosPerItem(itemMap);
         view.enterToContinue();
     }
 
