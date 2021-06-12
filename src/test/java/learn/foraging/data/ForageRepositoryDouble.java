@@ -47,4 +47,7 @@ public class ForageRepositoryDouble implements ForageRepository {
     public Map<String, Double> findKilogramsOfItemsOnDate(List<Forage> forages) {
         return null;
     }
+
+    @Override
+    public Map<String, Double> findTotalValueOfCategory(List<Forage> forages) { return null; }
 }

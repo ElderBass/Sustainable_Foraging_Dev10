@@ -43,7 +43,14 @@ public class View {
     public void displayKilosPerItem(Map<String, Double> items) {
         displayHeader(MainMenuOption.REPORT_KG_PER_ITEM.getMessage());
         for (String name : items.keySet()) {
-            System.out.printf("Item: %s | Total Kilograms: %.2f", name, items.get(name));
+            System.out.printf("Item: %s | Total Kilograms: %.2f kg", name, items.get(name));
+            System.out.println();
+        }
+    }
+
+    public void displayCategoryValues(Map<String, Double> categories) {
+        for (String category : categories.keySet()) {
+            System.out.printf("Category: %s | Total Value: $%.2f", category, categories.get(category));
             System.out.println();
         }
     }

@@ -51,6 +51,12 @@ public class ForageService {
         return itemMap;
     }
 
+    public Map<String, Double> findTotalValueOfCategory(LocalDate date) throws DataException {
+        List<Forage> foragesOnDate = findByDate(date);
+        Map<String, Double> categories = forageRepository.findTotalValueOfCategory(foragesOnDate);
+        return categories;
+    }
+
     public Result<Forage> add(Forage forage) throws DataException {
         Result<Forage> result = validate(forage);
         if (!result.isSuccess()) {

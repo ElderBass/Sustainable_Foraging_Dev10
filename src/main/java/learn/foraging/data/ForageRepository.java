@@ -14,4 +14,6 @@ public interface ForageRepository {
     boolean update(Forage forage) throws DataException;
 
     Map<String, Double> findKilogramsOfItemsOnDate(List<Forage> forages) throws DataException;
+
+    Map<String, Double> findTotalValueOfCategory(List<Forage> forages) throws DataException;
 }

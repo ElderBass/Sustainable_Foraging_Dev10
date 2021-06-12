@@ -1,13 +1,16 @@
 package learn.foraging.data;
 
+import learn.foraging.models.Category;
 import learn.foraging.models.Forage;
 import learn.foraging.models.Forager;
 import learn.foraging.models.Item;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -113,5 +116,30 @@ public class ForageFileRepository implements ForageRepository {
 
         Map<String, Double> itemMap = forages.stream().collect(Collectors.groupingBy(Forage::getItemName, Collectors.summingDouble(Forage::getKilograms)));
         return itemMap;
+    }
+
+    public Map<String, Double> findTotalValueOfCategory(List<Forage> forages) throws DataException {
+        // said to do this one via loops
+        // might just say fuck it and use streams lol
+        // category is part of Item so probably can't group by that
+        // perhaps make a list for each category, add all the items in there from the forage
+        Double edibleValue = filterForageByCategory(forages, Category.EDIBLE);
+        Double medicinalValue = filterForageByCategory(forages, Category.MEDICINAL);
+        Double inedibleValue = filterForageByCategory(forages, Category.INEDIBLE);
+        Double poisonValue = filterForageByCategory(forages, Category.POISONOUS);
+
+        Map<String, Double> categories = new HashMap<>();
+        categories.put("Edible", edibleValue);
+        categories.put("Medicinal", medicinalValue);
+        categories.put("Inedible", inedibleValue);
+        categories.put("Poisonous", poisonValue);
+
+        return categories;
+    }
+
+    private Double filterForageByCategory(List<Forage> forages, Category category) {
+        Double categoryValue = forages.stream().filter(forage -> forage.getItem().getCategory() == category)
+                .collect(Collectors.summingDouble(value -> value.getValue().doubleValue()));
+        return categoryValue;
     }
 }

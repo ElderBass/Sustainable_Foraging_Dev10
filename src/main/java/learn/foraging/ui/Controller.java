@@ -62,8 +62,7 @@ public class Controller {
                     viewTotalKilogramsPerItem();
                     break;
                 case REPORT_CATEGORY_VALUE:
-                    view.displayStatus(false, "NOT IMPLEMENTED");
-                    view.enterToContinue();
+                    viewTotalValuePerCategory();
                     break;
                 case GENERATE:
                     generate();
@@ -85,6 +84,14 @@ public class Controller {
         LocalDate date = view.getForageDate();
         Map<String, Double> itemMap = forageService.findKilogramsOfItemsOnDate(date);
         view.displayKilosPerItem(itemMap);
+        view.enterToContinue();
+    }
+
+    private void viewTotalValuePerCategory() throws DataException {
+        view.displayHeader(MainMenuOption.REPORT_CATEGORY_VALUE.getMessage());
+        LocalDate date = view.getForageDate();
+        Map<String, Double> categories = forageService.findTotalValueOfCategory(date);
+        view.displayCategoryValues(categories);
         view.enterToContinue();
     }
 
