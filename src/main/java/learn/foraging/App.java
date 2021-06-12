@@ -28,6 +28,11 @@ public class App {
 //
 //        Controller controller = new Controller(foragerService, forageService, itemService, view);
 
+        // TODO check out the tests for other methods
+
+        // TODO does update need to be implemented?
+
+
         ApplicationContext context = new ClassPathXmlApplicationContext("foraging-config.xml");
 
         Controller controller = context.getBean(Controller.class);

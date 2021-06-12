@@ -59,6 +59,17 @@ public class View {
         return io.readRequiredString("Forager last name starts with: ");
     }
 
+    public String getForagerState() { return io.readRequiredString("Enter the State's Abbreviation: "); }
+
+    public int chooseForagerFilter() {
+        displayHeader("Filter Foragers");
+        System.out.println();
+        System.out.println("1. Filter by Last Name");
+        System.out.println("2. Filter by State");
+        System.out.println("3. Filter by Date");
+        return io.readInt("Choose a Filter [1-3]: ", 1, 3);
+    }
+
     public Forager chooseForager(List<Forager> foragers) {
         if (foragers.size() == 0) {
             io.println("No foragers found");
@@ -206,6 +217,13 @@ public class View {
                     forage.getItem().getCategory(),
                     forage.getValue()
             );
+        }
+    }
+
+    public void displayForagers(List<Forager> foragers) {
+        for (Forager f : foragers) {
+            System.out.printf("Name:  %s %s | State: %s", f.getFirstName(), f.getLastName(), f.getState());
+            System.out.println();
         }
     }
 

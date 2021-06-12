@@ -10,7 +10,9 @@ import learn.foraging.models.Forage;
 import learn.foraging.models.Forager;
 import learn.foraging.models.Item;
 
+import java.awt.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +50,9 @@ public class Controller {
                     break;
                 case VIEW_ITEMS:
                     viewItems();
+                    break;
+                case VIEW_FORAGERS:
+                    viewForagers();
                     break;
                 case ADD_FORAGE:
                     addForage();
@@ -92,6 +97,15 @@ public class Controller {
         LocalDate date = view.getForageDate();
         Map<String, Double> categories = forageService.findTotalValueOfCategory(date);
         view.displayCategoryValues(categories);
+        view.enterToContinue();
+    }
+
+    private void viewForagers() {
+        view.displayHeader(MainMenuOption.VIEW_FORAGERS.getMessage());
+        // TODO flesh this out
+        int filter = view.chooseForagerFilter();
+        List<Forager> foragers = filterForagers(filter);
+        view.displayForagers(foragers);
         view.enterToContinue();
     }
 
@@ -165,5 +179,43 @@ public class Controller {
         Category category = view.getItemCategory();
         List<Item> items = itemService.findByCategory(category);
         return view.chooseItem(items);
+    }
+
+    private List<Forager> filterForagers(int filter) {
+        List<Forager> foragers = null;
+        switch(filter) {
+            case 1:
+                foragers = filterForagersByLastName();
+                break;
+            case 2:
+                foragers = filterForagersByState();
+                break;
+            case 3:
+                foragers = filterForagersByDate();
+                break;
+        }
+        return foragers;
+    }
+
+    private List<Forager> filterForagersByLastName() {
+        String lastNamePrefix = view.getForagerNamePrefix();
+        List<Forager> foragers = foragerService.findByLastName(lastNamePrefix);
+        return foragers;
+    }
+
+    private List<Forager> filterForagersByState() {
+        String state = view.getForagerState();
+        List<Forager> all = foragerService.findByState(state);
+        return all;
+    }
+
+    private List<Forager> filterForagersByDate() {
+        LocalDate date = view.getForageDate();
+        List<Forage> forages = forageService.findByDate(date);
+        List<Forager> foragers = new ArrayList<>();
+        for (Forage f : forages) {
+            foragers.add(f.getForager());
+        }
+        return foragers;
     }
 }

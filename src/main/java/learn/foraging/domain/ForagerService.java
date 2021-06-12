@@ -16,7 +16,13 @@ public class ForagerService {
     }
 
     public List<Forager> findByState(String stateAbbr) {
-        return repository.findByState(stateAbbr);
+        List<Forager> foragers = repository.findByState(stateAbbr);
+        if (foragers.isEmpty()) {
+            System.out.println("No Foragers found in that state.");
+            return null;
+        } else {
+            return foragers;
+        }
     }
 
     public List<Forager> findByLastName(String prefix) {
@@ -25,7 +31,7 @@ public class ForagerService {
                 .collect(Collectors.toList());
     }
 
-    // TODO add an addForager() method and a validate() method for checking addForager input
+
     public Result<Forager> addForager(Forager forager) throws DataException {
         Result result = validate(forager);
         if (!result.isSuccess()) {
