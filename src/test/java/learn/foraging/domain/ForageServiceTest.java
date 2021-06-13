@@ -70,5 +70,17 @@ class ForageServiceTest {
         assertFalse(result.isSuccess());
     }
 
+    @Test
+    void shouldNotAddYearFromFuture() throws DataException {
+        Forage forage = new Forage();
+        forage.setDate(LocalDate.of(2090, 1, 1));
+        forage.setForager(ForagerRepositoryDouble.FORAGER);
+        forage.setItem(ItemRepositoryDouble.ITEM);
+        forage.setKilograms(0.5);
+
+        Result<Forage> result = service.add(forage);
+        assertFalse(result.isSuccess());
+    }
+
 
 }
