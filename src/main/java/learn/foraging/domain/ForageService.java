@@ -107,18 +107,18 @@ public class ForageService {
             return result;
         }
 
-        validateFields(forage, result);
+        result = validateFields(forage, result);
         if (!result.isSuccess()) {
             return result;
         }
 
-        validateChildrenExist(forage, result);
+        result = validateChildrenExist(forage, result);
         if (!result.isSuccess()) {
             return result;
         }
 
-        validateNotDuplicate(forage, result);
-
+        result = validateNotDuplicate(forage, result);
+        System.out.println("Is success? = " + result.isSuccess());
         return result;
     }
 
@@ -144,7 +144,7 @@ public class ForageService {
         return result;
     }
 
-    private void validateFields(Forage forage, Result<Forage> result) {
+    private Result<Forage> validateFields(Forage forage, Result<Forage> result) {
         // No future dates.
         if (forage.getDate().isAfter(LocalDate.now())) {
             result.addErrorMessage("Forage date cannot be in the future.");
@@ -153,9 +153,10 @@ public class ForageService {
         if (forage.getKilograms() <= 0 || forage.getKilograms() > 250.0) {
             result.addErrorMessage("Kilograms must be a positive number less than 250.0");
         }
+        return result;
     }
 
-    private void validateChildrenExist(Forage forage, Result<Forage> result) {
+    private Result<Forage> validateChildrenExist(Forage forage, Result<Forage> result) {
 
         if (forage.getForager().getId() == null
                 || foragerRepository.findById(forage.getForager().getId()) == null) {
@@ -165,14 +166,19 @@ public class ForageService {
         if (itemRepository.findById(forage.getItem().getId()) == null) {
             result.addErrorMessage("Item does not exist.");
         }
+        return result;
     }
 
-    private void validateNotDuplicate(Forage forage, Result<Forage> result) {
-        List<Forage> forages = forageRepository.findByDate(forage.getDate());
+    private Result<Forage> validateNotDuplicate(Forage forage, Result<Forage> result) {
+        List<Forage> forages = findByDate(forage.getDate());
         for (Forage f : forages) {
-            if (f.getForager().equals(forage.getForager()) && f.getItem().equals(forage.getItem())) {
+            if (f.getForager().getFirstName().equals(forage.getForager().getFirstName())
+                    && f.getForager().getLastName().equals(forage.getForager().getLastName())
+                    && f.getItem().getName().equals(forage.getItem().getName())) {
                 result.addErrorMessage("Item and Forager already exist on this date. Cannot add duplicate Forages.");
+                break;
             }
         }
+        return result;
     }
 }

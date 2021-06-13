@@ -93,6 +93,5 @@ class ForageServiceTest {
         forage.setKilograms(1.25);
         Result<Forage> result = service.add(forage);
         assertFalse(result.isSuccess());
-
     }
 }
