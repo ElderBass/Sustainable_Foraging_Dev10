@@ -29,6 +29,13 @@ class ItemServiceTest {
     }
 
     @Test
+    void shouldNotSaveDuplicateName() throws DataException {
+        Item item = new Item(0, "Chanterelle", Category.EDIBLE, new BigDecimal("5.00"));
+        Result<Item> result = service.add(item);
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
     void shouldNotSaveNullDollars() throws DataException {
         Item item = new Item(0, "Test Item", Category.EDIBLE, null);
         Result<Item> result = service.add(item);

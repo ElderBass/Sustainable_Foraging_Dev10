@@ -60,7 +60,6 @@ public class ForagerFileRepository implements ForagerRepository {
                 .filter(i -> i.getState().equalsIgnoreCase(stateAbbr))
                 .sorted(Comparator.comparing(Forager::getLastName))
                 .collect(Collectors.toList());
-
     }
 
     @Override
