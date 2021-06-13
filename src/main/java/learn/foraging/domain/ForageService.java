@@ -10,10 +10,7 @@ import learn.foraging.models.Item;
 
 import java.sql.SQLOutput;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ForageService {
@@ -40,6 +37,11 @@ public class ForageService {
         for (Forage forage : result) {
             forage.setForager(foragerMap.get(forage.getForager().getId()));
             forage.setItem(itemMap.get(forage.getItem().getId()));
+        }
+
+        if (result.isEmpty() || result == null) {
+            System.out.println("No Forages found on that date. Please try again.");
+            return null;
         }
         return result;
     }

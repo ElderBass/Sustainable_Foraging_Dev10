@@ -15,14 +15,14 @@ public class ForagerService {
         this.repository = repository;
     }
 
-    public List<Forager> findByState(String stateAbbr) {
+    public List<Forager> findAll() {
+        return repository.findAll();
+    }
+
+    public Result<List<Forager>> findByState(String stateAbbr) {
         List<Forager> foragers = repository.findByState(stateAbbr);
-        if (foragers.isEmpty()) {
-            System.out.println("No Foragers found in that state.");
-            return null;
-        } else {
-            return foragers;
-        }
+        Result<List<Forager>> result = validateList(foragers);
+        return result;
     }
 
     public List<Forager> findByLastName(String prefix) {
@@ -55,6 +55,17 @@ public class ForagerService {
         }
 
         return result;
+    }
+
+    private Result<List<Forager>> validateList(List<Forager> foragers) {
+        Result<List<Forager>> result = new Result<>();
+        if (foragers.isEmpty() || foragers == null) {
+            result.addErrorMessage("No Foragers Found. Please Try Again.");
+        } else {
+            result.setPayload(foragers);
+        }
+        return result;
+
     }
 
     private Result<Forager> validateNullAndEmpty(Forager forager) {

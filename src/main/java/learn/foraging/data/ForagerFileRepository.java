@@ -8,6 +8,7 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,7 @@ public class ForagerFileRepository implements ForagerRepository {
 
     @Override
     public List<Forager> findAll() {
-        ArrayList<Forager> result = new ArrayList<>();
+        List<Forager> result = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
 
             reader.readLine(); // read header
@@ -37,6 +38,10 @@ public class ForagerFileRepository implements ForagerRepository {
         } catch (IOException ex) {
             // don't throw on read
         }
+        // added this to sort them by alphabetically by last name
+        result = result.stream()
+                .sorted(Comparator.comparing(Forager::getLastName))
+                .collect(Collectors.toList());
         return result;
     }
 
@@ -50,9 +55,12 @@ public class ForagerFileRepository implements ForagerRepository {
 
     @Override
     public List<Forager> findByState(String stateAbbr) {
+        // Sorted this as well to filter by last name
         return findAll().stream()
                 .filter(i -> i.getState().equalsIgnoreCase(stateAbbr))
+                .sorted(Comparator.comparing(Forager::getLastName))
                 .collect(Collectors.toList());
+
     }
 
     @Override

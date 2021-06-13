@@ -13,8 +13,10 @@ import learn.foraging.models.Item;
 import java.awt.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Controller {
 
@@ -102,11 +104,16 @@ public class Controller {
 
     private void viewForagers() {
         view.displayHeader(MainMenuOption.VIEW_FORAGERS.getMessage());
-        // TODO flesh this out
         int filter = view.chooseForagerFilter();
         List<Forager> foragers = filterForagers(filter);
-        view.displayForagers(foragers);
-        view.enterToContinue();
+
+        if (foragers == null || foragers.isEmpty()) {
+            System.out.println("Proceeding to Main Menu");
+            return;
+        } else {
+            view.displayForagers(foragers);
+            view.enterToContinue();
+        }
     }
 
     private void viewItems() {
@@ -183,7 +190,10 @@ public class Controller {
 
     private List<Forager> filterForagers(int filter) {
         List<Forager> foragers = null;
-        switch(filter) {
+        switch (filter) {
+            case 0:
+                foragers = foragerService.findAll();
+                break;
             case 1:
                 foragers = filterForagersByLastName();
                 break;
@@ -199,23 +209,40 @@ public class Controller {
 
     private List<Forager> filterForagersByLastName() {
         String lastNamePrefix = view.getForagerNamePrefix();
+        System.out.println();
+        view.displayHeader("Viewing Forager Results For \"" + lastNamePrefix + "\"");
         List<Forager> foragers = foragerService.findByLastName(lastNamePrefix);
         return foragers;
     }
 
     private List<Forager> filterForagersByState() {
         String state = view.getForagerState();
-        List<Forager> all = foragerService.findByState(state);
-        return all;
+        System.out.println();
+        Result<List<Forager>> result = foragerService.findByState(state);
+        if (!result.isSuccess()) {
+            view.displayStatus(false, result.getErrorMessages());
+            return null;
+        } else {
+            view.displayHeader("Viewing Foragers From " + state.toUpperCase());
+            return result.getPayload();
+        }
     }
 
     private List<Forager> filterForagersByDate() {
         LocalDate date = view.getForageDate();
+        System.out.println();
         List<Forage> forages = forageService.findByDate(date);
         List<Forager> foragers = new ArrayList<>();
+        if (forages == null || forages.isEmpty()) {
+            return foragers;
+        }
+        view.displayHeader("Viewing Foragers on " + date);
         for (Forage f : forages) {
             foragers.add(f.getForager());
         }
+        foragers = foragers.stream()
+                .sorted(Comparator.comparing(Forager::getLastName))
+                .collect(Collectors.toList());
         return foragers;
     }
 }

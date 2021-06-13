@@ -59,15 +59,25 @@ public class View {
         return io.readRequiredString("Forager last name starts with: ");
     }
 
-    public String getForagerState() { return io.readRequiredString("Enter the State's Abbreviation: "); }
+    public String getForagerState() {
+        String abbr = "";
+        do {
+            abbr = io.readRequiredString("Enter the State's Abbreviation: ");
+            if (abbr.length() != 2) {
+                System.out.println("Invalid abbreviation. Please try again.");
+            }
+        } while (abbr.length() != 2);
+        return  abbr;
+    }
 
     public int chooseForagerFilter() {
-        displayHeader("Filter Foragers");
         System.out.println();
+        System.out.println("0. View All Foragers");
         System.out.println("1. Filter by Last Name");
         System.out.println("2. Filter by State");
         System.out.println("3. Filter by Date");
-        return io.readInt("Choose a Filter [1-3]: ", 1, 3);
+        System.out.println();
+        return io.readInt("Enter \"0\" to View All \nOR\nChoose a Filter [1-3]: ", 0, 3);
     }
 
     public Forager chooseForager(List<Forager> foragers) {
