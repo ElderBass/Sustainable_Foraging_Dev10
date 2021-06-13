@@ -192,6 +192,8 @@ public class Controller {
         List<Forager> foragers = null;
         switch (filter) {
             case 0:
+                view.displayHeader("Viewing All Foragers");
+                System.out.println();
                 foragers = foragerService.findAll();
                 break;
             case 1:
