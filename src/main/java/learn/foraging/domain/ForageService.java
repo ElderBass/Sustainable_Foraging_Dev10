@@ -189,6 +189,9 @@ public class ForageService {
 
     private Result<Forage> validateNotDuplicate(Forage forage, Result<Forage> result) {
         List<Forage> forages = findByDate(forage.getDate());
+        if (forages == null || forages.isEmpty()) {
+            return result;
+        }
         for (Forage f : forages) {
             if (f.getForager().getFirstName().equals(forage.getForager().getFirstName())
                     && f.getForager().getLastName().equals(forage.getForager().getLastName())

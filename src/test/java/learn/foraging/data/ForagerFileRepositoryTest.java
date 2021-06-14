@@ -24,11 +24,11 @@ class ForagerFileRepositoryTest {
 
         newForager.setFirstName("Test");
         newForager.setLastName("Testerson");
-        newForager.setState("Alaska");
+        newForager.setState("AL");
         Forager forager = repo.addForager(newForager);
 
         List<Forager> all = repo.findAll();
-        assertEquals(1001, all.size());
+        assertEquals(1004, all.size());
 
         assertEquals("Test", repo.findById(forager.getId()).getFirstName());
     }
