@@ -118,10 +118,7 @@ public class ForageFileRepository implements ForageRepository {
     }
 
     public Map<String, Double> findTotalValueOfCategory(List<Forage> forages) throws DataException {
-        // said to do this one via loops
-        // might just say fuck it and use streams lol
-        // category is part of Item so probably can't group by that
-        // perhaps make a list for each category, add all the items in there from the forage
+
         Double edibleValue = filterForageByCategory(forages, Category.EDIBLE);
         Double medicinalValue = filterForageByCategory(forages, Category.MEDICINAL);
         Double inedibleValue = filterForageByCategory(forages, Category.INEDIBLE);
