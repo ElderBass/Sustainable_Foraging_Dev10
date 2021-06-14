@@ -106,6 +106,10 @@ public class Controller {
         view.displayHeader(MainMenuOption.REPORT_CATEGORY_VALUE.getMessage());
         LocalDate date = view.getForageDate();
         Map<String, Double> categories = forageService.findTotalValueOfCategory(date);
+        if (categories == null || categories.isEmpty()) {
+            System.out.println("Proceeding to Main Menu");
+            return;
+        }
         view.displayCategoryValues(categories);
         view.enterToContinue();
     }

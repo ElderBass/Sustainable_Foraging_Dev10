@@ -48,9 +48,12 @@ public class ForageService {
 
     public Map<String, Double> findKilogramsOfItemsOnDate(LocalDate date) throws DataException {
        List<Forage> foragesOnDate = findByDate(date);
-       Map<String, Double> itemMap = forageRepository.findKilogramsOfItemsOnDate(foragesOnDate);
-
-        return itemMap;
+       if (foragesOnDate == null || foragesOnDate.isEmpty()) {
+           return null;
+       } else {
+           Map<String, Double> itemMap = forageRepository.findKilogramsOfItemsOnDate(foragesOnDate);
+           return itemMap;
+       }
     }
 
     public Map<String, Double> findTotalValueOfCategory(LocalDate date) throws DataException {
