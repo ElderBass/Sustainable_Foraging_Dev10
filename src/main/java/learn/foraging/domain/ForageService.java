@@ -70,6 +70,17 @@ public class ForageService {
         return result;
     }
 
+    public Result<Forage> update(Forage forage) throws DataException {
+        Result<Forage> result = validate(forage);
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        result.setPayload(forageRepository.add(forage));
+
+        return result;
+    }
+
     public int generate(LocalDate start, LocalDate end, int count) throws DataException {
 
         if (start == null || end == null || start.isAfter(end) || count <= 0) {

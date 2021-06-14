@@ -12,6 +12,11 @@ public class ForagerRepositoryDouble implements ForagerRepository {
 
     private final ArrayList<Forager> foragers = new ArrayList<>();
 
+    @Override
+    public boolean updateForager(Forager forager) throws DataException {
+        return false;
+    }
+
     public ForagerRepositoryDouble() {
         foragers.add(FORAGER);
     }

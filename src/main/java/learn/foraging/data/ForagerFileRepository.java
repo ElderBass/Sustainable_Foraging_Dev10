@@ -70,6 +70,19 @@ public class ForagerFileRepository implements ForagerRepository {
         writeAll(foragers);
         return forager;
     }
+
+    @Override
+    public boolean updateForager(Forager forager) throws DataException {
+        List<Forager> foragers = findAll();
+        for (int i = 0; i < foragers.size(); i++) {
+            if (foragers.get(i).getId() == forager.getId()) {
+                foragers.set(i, forager);
+                writeAll(foragers);
+                return true;
+            }
+        }
+        return false;
+    }
     
     private Forager deserialize(String[] fields) {
         Forager result = new Forager();

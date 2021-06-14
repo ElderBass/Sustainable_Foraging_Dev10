@@ -105,6 +105,24 @@ public class View {
         return foragers.get(index - 1);
     }
 
+    public Forager updateForager(Forager forager) {
+        System.out.println("Hit [Enter] to keep other fields at their previous values.");
+        String firstName = io.readString("First Name (" + forager.getFirstName() + "): ");
+        if (firstName.trim().length() > 0) {
+            forager.setFirstName(firstName);
+        }
+        String lastName = io.readString("Last Name (" + forager.getLastName() + "): ");
+        if (lastName.trim().length() > 0) {
+            forager.setLastName(lastName);
+        }
+        String state = io.readRequiredString("State (abbreviated) (" + forager.getState() + "): ");
+        if (state.trim().length() == 2) {
+            forager.setState(state);
+        }
+        System.out.println();
+        return forager;
+    }
+
     public Category getItemCategory() {
         displayHeader("Item Categories");
         int index = 1;

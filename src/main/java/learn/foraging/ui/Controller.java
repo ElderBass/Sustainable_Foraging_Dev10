@@ -10,6 +10,7 @@ import learn.foraging.models.Forage;
 import learn.foraging.models.Forager;
 import learn.foraging.models.Item;
 
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -61,6 +62,9 @@ public class Controller {
                     break;
                 case ADD_FORAGER:
                     addForager();
+                    break;
+                case UPDATE_FORAGER:
+                    updateForager();
                     break;
                 case ADD_ITEM:
                     addItem();
@@ -145,6 +149,11 @@ public class Controller {
         }
     }
 
+    private void updateForage() throws DataException {
+        // how to select a Forage?
+    }
+
+
     private void addForager() throws DataException {
         Forager forager = view.makeForager();
         Result<Forager> result = foragerService.addForager(forager);
@@ -155,6 +164,22 @@ public class Controller {
             view.displayStatus(true, successMessage);
         }
     }
+
+    public void updateForager() throws DataException {
+        view.displayHeader("Update a Forager");
+        String lastNamePrefix = view.getForagerNamePrefix();
+        System.out.println();
+        List<Forager> foragers = foragerService.findByLastName(lastNamePrefix);
+        Forager forager = view.chooseForager(foragers);
+        Forager updated = view.updateForager(forager);
+        Result<Forager> result = foragerService.updateForager(updated);
+        if (result.isSuccess()) {
+            view.displayStatus(true, "Forager " + updated.getId() + " has been updated.");
+        } else {
+            view.displayStatus(false, result.getErrorMessages());
+        }
+    }
+
 
     private void addItem() throws DataException {
         Item item = view.makeItem();

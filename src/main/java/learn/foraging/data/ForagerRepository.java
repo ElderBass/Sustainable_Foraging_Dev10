@@ -12,4 +12,6 @@ public interface ForagerRepository {
     List<Forager> findByState(String stateAbbr);
 
     Forager addForager(Forager forager) throws DataException;
+
+    boolean updateForager(Forager forager) throws DataException;
 }

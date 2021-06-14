@@ -43,6 +43,21 @@ public class ForagerService {
         return result;
     }
 
+    public Result<Forager> updateForager(Forager forager) throws DataException {
+        Result result = validate(forager);
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        if (repository.updateForager(forager)) {
+            result.setPayload(forager);
+            System.out.println("Forager " + forager.getId() + " Has Been Updated.");
+        }  else {
+            result.addErrorMessage("Could Not Find Forager With ID " + forager.getId());
+        }
+        return result;
+    }
+
     private Result<Forager> validate(Forager forager) {
         Result<Forager> result = validateNullAndEmpty(forager);
         if (!result.isSuccess()) {
