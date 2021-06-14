@@ -15,12 +15,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class App {
     public static void main(String[] args) {
 
-
-        // TODO check out the tests for other methods
-
-        // TODO does update need to be implemented?
-
-
         ApplicationContext context = new ClassPathXmlApplicationContext("foraging-config.xml");
 
         Controller controller = context.getBean(Controller.class);

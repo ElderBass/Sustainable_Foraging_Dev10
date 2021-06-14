@@ -94,6 +94,10 @@ public class Controller {
     private void viewTotalKilogramsPerItem() throws DataException {
         LocalDate date = view.getForageDate();
         Map<String, Double> itemMap = forageService.findKilogramsOfItemsOnDate(date);
+        if (itemMap == null || itemMap.isEmpty()) {
+            System.out.println("Proceeding to Main Menu");
+            return;
+        }
         view.displayKilosPerItem(itemMap);
         view.enterToContinue();
     }

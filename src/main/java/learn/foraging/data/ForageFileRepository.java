@@ -94,7 +94,6 @@ public class ForageFileRepository implements ForageRepository {
                 item.getKilograms());
     }
 
-    // TODO I had to change this but might change it back...
     private Forage deserialize(String[] fields, LocalDate date) {
         Forage result = new Forage();
         result.setId(fields[0]);

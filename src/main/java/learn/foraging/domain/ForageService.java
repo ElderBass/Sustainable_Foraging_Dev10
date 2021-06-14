@@ -45,18 +45,22 @@ public class ForageService {
         }
         return result;
     }
-// TODO this may need to be expanded
+
     public Map<String, Double> findKilogramsOfItemsOnDate(LocalDate date) throws DataException {
        List<Forage> foragesOnDate = findByDate(date);
        Map<String, Double> itemMap = forageRepository.findKilogramsOfItemsOnDate(foragesOnDate);
-       // how/need to verify anything...?
+
         return itemMap;
     }
 
     public Map<String, Double> findTotalValueOfCategory(LocalDate date) throws DataException {
         List<Forage> foragesOnDate = findByDate(date);
-        Map<String, Double> categories = forageRepository.findTotalValueOfCategory(foragesOnDate);
-        return categories;
+        if (foragesOnDate == null || foragesOnDate.isEmpty()) {
+            return null;
+        } else {
+            Map<String, Double> categories = forageRepository.findTotalValueOfCategory(foragesOnDate);
+            return categories;
+        }
     }
 
     public Result<Forage> add(Forage forage) throws DataException {
