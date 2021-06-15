@@ -60,4 +60,8 @@ public class Forage {
         return item.getDollarPerKilogram().multiply(kilos);
     }
 
+    public String getItemName() {
+        return item.getName();
+    }
+
 }

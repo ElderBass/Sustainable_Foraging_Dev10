@@ -8,11 +8,9 @@ import learn.foraging.models.Forage;
 import learn.foraging.models.Forager;
 import learn.foraging.models.Item;
 
+import java.sql.SQLOutput;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ForageService {
@@ -35,15 +33,51 @@ public class ForageService {
                 .collect(Collectors.toMap(i -> i.getId(), i -> i));
 
         List<Forage> result = forageRepository.findByDate(date);
+
         for (Forage forage : result) {
             forage.setForager(foragerMap.get(forage.getForager().getId()));
             forage.setItem(itemMap.get(forage.getItem().getId()));
         }
 
+        if (result.isEmpty() || result == null) {
+            System.out.println("No Forages found on that date. Please try again.");
+            return null;
+        }
         return result;
     }
 
+    public Map<String, Double> findKilogramsOfItemsOnDate(LocalDate date) throws DataException {
+       List<Forage> foragesOnDate = findByDate(date);
+       if (foragesOnDate == null || foragesOnDate.isEmpty()) {
+           return null;
+       } else {
+           Map<String, Double> itemMap = forageRepository.findKilogramsOfItemsOnDate(foragesOnDate);
+           return itemMap;
+       }
+    }
+
+    public Map<String, Double> findTotalValueOfCategory(LocalDate date) throws DataException {
+        List<Forage> foragesOnDate = findByDate(date);
+        if (foragesOnDate == null || foragesOnDate.isEmpty()) {
+            return null;
+        } else {
+            Map<String, Double> categories = forageRepository.findTotalValueOfCategory(foragesOnDate);
+            return categories;
+        }
+    }
+
     public Result<Forage> add(Forage forage) throws DataException {
+        Result<Forage> result = validate(forage);
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        result.setPayload(forageRepository.add(forage));
+
+        return result;
+    }
+
+    public Result<Forage> update(Forage forage) throws DataException {
         Result<Forage> result = validate(forage);
         if (!result.isSuccess()) {
             return result;
@@ -91,13 +125,18 @@ public class ForageService {
             return result;
         }
 
-        validateFields(forage, result);
+        result = validateFields(forage, result);
         if (!result.isSuccess()) {
             return result;
         }
 
-        validateChildrenExist(forage, result);
+        result = validateChildrenExist(forage, result);
+        if (!result.isSuccess()) {
+            return result;
+        }
 
+        result = validateNotDuplicate(forage, result);
+        System.out.println("Is success? = " + result.isSuccess());
         return result;
     }
 
@@ -123,7 +162,7 @@ public class ForageService {
         return result;
     }
 
-    private void validateFields(Forage forage, Result<Forage> result) {
+    private Result<Forage> validateFields(Forage forage, Result<Forage> result) {
         // No future dates.
         if (forage.getDate().isAfter(LocalDate.now())) {
             result.addErrorMessage("Forage date cannot be in the future.");
@@ -132,9 +171,10 @@ public class ForageService {
         if (forage.getKilograms() <= 0 || forage.getKilograms() > 250.0) {
             result.addErrorMessage("Kilograms must be a positive number less than 250.0");
         }
+        return result;
     }
 
-    private void validateChildrenExist(Forage forage, Result<Forage> result) {
+    private Result<Forage> validateChildrenExist(Forage forage, Result<Forage> result) {
 
         if (forage.getForager().getId() == null
                 || foragerRepository.findById(forage.getForager().getId()) == null) {
@@ -144,5 +184,22 @@ public class ForageService {
         if (itemRepository.findById(forage.getItem().getId()) == null) {
             result.addErrorMessage("Item does not exist.");
         }
+        return result;
+    }
+
+    private Result<Forage> validateNotDuplicate(Forage forage, Result<Forage> result) {
+        List<Forage> forages = findByDate(forage.getDate());
+        if (forages == null || forages.isEmpty()) {
+            return result;
+        }
+        for (Forage f : forages) {
+            if (f.getForager().getFirstName().equals(forage.getForager().getFirstName())
+                    && f.getForager().getLastName().equals(forage.getForager().getLastName())
+                    && f.getItem().getName().equals(forage.getItem().getName())) {
+                result.addErrorMessage("Item and Forager already exist on this date. Cannot add duplicate Forages.");
+                break;
+            }
+        }
+        return result;
     }
 }

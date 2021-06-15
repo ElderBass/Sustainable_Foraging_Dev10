@@ -12,6 +12,11 @@ public class ForagerRepositoryDouble implements ForagerRepository {
 
     private final ArrayList<Forager> foragers = new ArrayList<>();
 
+    @Override
+    public boolean updateForager(Forager forager) throws DataException {
+        return false;
+    }
+
     public ForagerRepositoryDouble() {
         foragers.add(FORAGER);
     }
@@ -34,6 +39,13 @@ public class ForagerRepositoryDouble implements ForagerRepository {
         return foragers.stream()
                 .filter(i -> i.getState().equalsIgnoreCase(stateAbbr))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Forager addForager(Forager forager) {
+        forager.setId(java.util.UUID.randomUUID().toString());
+        foragers.add(forager);
+        return forager;
     }
 
     private static Forager makeForager() {

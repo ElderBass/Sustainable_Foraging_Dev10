@@ -1,19 +1,26 @@
 package learn.foraging.data;
 
+import learn.foraging.models.Category;
 import learn.foraging.models.Forage;
 import learn.foraging.models.Forager;
 import learn.foraging.models.Item;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ForageFileRepository implements ForageRepository {
 
     private static final String HEADER = "id,forager_id,item_id,kg";
     private final String directory;
+   // private final ForagerRepository foragerRepository = new ForagerFileRepository("./data/foragers.csv");
+   // private final ItemRepository itemRepository = new ItemFileRepository("./data/items.txt");
 
     public ForageFileRepository(String directory) {
         this.directory = directory;
@@ -21,6 +28,7 @@ public class ForageFileRepository implements ForageRepository {
 
     @Override
     public List<Forage> findByDate(LocalDate date) {
+
         ArrayList<Forage> result = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(getFilePath(date)))) {
 
@@ -100,5 +108,34 @@ public class ForageFileRepository implements ForageRepository {
         item.setId(Integer.parseInt(fields[2]));
         result.setItem(item);
         return result;
+    }
+
+    // TODO not sure if here or where but eventually need to ensure there are forages on that date and if not add an error message
+    public Map<String, Double> findKilogramsOfItemsOnDate(List<Forage> forages) {
+
+        Map<String, Double> itemMap = forages.stream().collect(Collectors.groupingBy(Forage::getItemName, Collectors.summingDouble(Forage::getKilograms)));
+        return itemMap;
+    }
+
+    public Map<String, Double> findTotalValueOfCategory(List<Forage> forages) throws DataException {
+
+        Double edibleValue = filterForageByCategory(forages, Category.EDIBLE);
+        Double medicinalValue = filterForageByCategory(forages, Category.MEDICINAL);
+        Double inedibleValue = filterForageByCategory(forages, Category.INEDIBLE);
+        Double poisonValue = filterForageByCategory(forages, Category.POISONOUS);
+
+        Map<String, Double> categories = new HashMap<>();
+        categories.put("Edible", edibleValue);
+        categories.put("Medicinal", medicinalValue);
+        categories.put("Inedible", inedibleValue);
+        categories.put("Poisonous", poisonValue);
+
+        return categories;
+    }
+
+    private Double filterForageByCategory(List<Forage> forages, Category category) {
+        Double categoryValue = forages.stream().filter(forage -> forage.getItem().getCategory() == category)
+                .collect(Collectors.summingDouble(value -> value.getValue().doubleValue()));
+        return categoryValue;
     }
 }

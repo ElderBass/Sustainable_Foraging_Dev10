@@ -8,6 +8,7 @@ import learn.foraging.models.Item;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class View {
@@ -35,12 +36,48 @@ public class View {
     }
 
     public LocalDate getForageDate() {
-        displayHeader(MainMenuOption.VIEW_FORAGES_BY_DATE.getMessage());
+        //displayHeader(MainMenuOption.VIEW_FORAGES_BY_DATE.getMessage());
         return io.readLocalDate("Select a date [MM/dd/yyyy]: ");
+    }
+
+    public void displayKilosPerItem(Map<String, Double> items) {
+        displayHeader(MainMenuOption.REPORT_KG_PER_ITEM.getMessage());
+        for (String name : items.keySet()) {
+            System.out.printf("Item: %s | Total Kilograms: %.2f kg", name, items.get(name));
+            System.out.println();
+        }
+    }
+
+    public void displayCategoryValues(Map<String, Double> categories) {
+        for (String category : categories.keySet()) {
+            System.out.printf("Category: %s | Total Value: $%.2f", category, categories.get(category));
+            System.out.println();
+        }
     }
 
     public String getForagerNamePrefix() {
         return io.readRequiredString("Forager last name starts with: ");
+    }
+
+    public String getForagerState() {
+        String abbr = "";
+        do {
+            abbr = io.readRequiredString("Enter the State's Abbreviation: ");
+            if (abbr.length() != 2) {
+                System.out.println("Invalid abbreviation. Please try again.");
+            }
+        } while (abbr.length() != 2);
+        return  abbr;
+    }
+
+    public int chooseForagerFilter() {
+        System.out.println();
+        System.out.println("0. View All Foragers");
+        System.out.println("1. Filter by Last Name");
+        System.out.println("2. Filter by State");
+        System.out.println("3. Filter by Date");
+        System.out.println();
+        return io.readInt("Enter \"0\" to View All \nOR\nChoose a Filter [1-3]: ", 0, 3);
     }
 
     public Forager chooseForager(List<Forager> foragers) {
@@ -66,6 +103,24 @@ public class View {
             return null;
         }
         return foragers.get(index - 1);
+    }
+
+    public Forager updateForager(Forager forager) {
+        System.out.println("Hit [Enter] to keep other fields at their previous values.");
+        String firstName = io.readString("First Name (" + forager.getFirstName() + "): ");
+        if (firstName.trim().length() > 0) {
+            forager.setFirstName(firstName);
+        }
+        String lastName = io.readString("Last Name (" + forager.getLastName() + "): ");
+        if (lastName.trim().length() > 0) {
+            forager.setLastName(lastName);
+        }
+        String state = io.readRequiredString("State (abbreviated) (" + forager.getState() + "): ");
+        if (state.trim().length() == 2) {
+            forager.setState(state);
+        }
+        System.out.println();
+        return forager;
     }
 
     public Category getItemCategory() {
@@ -108,6 +163,16 @@ public class View {
         String message = String.format("Kilograms of %s: ", item.getName());
         forage.setKilograms(io.readDouble(message, 0.001, 250.0));
         return forage;
+    }
+
+    public Forager makeForager() {
+        displayHeader(MainMenuOption.ADD_FORAGER.getMessage());
+        Forager forager = new Forager();
+        forager.setFirstName(io.readRequiredString("Enter Forager's First Name: "));
+        forager.setLastName(io.readRequiredString("Enter Forager's Last Name: "));
+        forager.setState(io.readRequiredString("Enter Forager's State Abbreviation [e.g. New York = NY]: ").toUpperCase());
+        return forager;
+
     }
 
     public Item makeItem() {
@@ -173,13 +238,20 @@ public class View {
             return;
         }
         for (Forage forage : forages) {
-            io.printf("%s %s - %s:%s - Value: $%.2f%n",
-                    forage.getForager().getFirstName(),
+            io.printf("%s %s - %s: %s - Value: $%.2f%n",
+                    forage.getForager().getFirstName(), // this is where stuff keeps breaking
                     forage.getForager().getLastName(),
                     forage.getItem().getName(),
                     forage.getItem().getCategory(),
                     forage.getValue()
             );
+        }
+    }
+
+    public void displayForagers(List<Forager> foragers) {
+        for (Forager f : foragers) {
+            System.out.printf("Name:  %s %s | State: %s", f.getFirstName(), f.getLastName(), f.getState());
+            System.out.println();
         }
     }
 
